@@ -13,10 +13,7 @@ export type Employee = {
         authorizationName: string,
         level: string;
     };
-    history?: {
-        date: Date | string ;
-        action: "entrada" | "saida"
-    };
+    history?: Date;
 }
 
 type EmployeeContextType = {
@@ -27,7 +24,7 @@ type EmployeeContextType = {
     addRecentEmployee: (id: string | number) => void;
     searchedEmployee: Employee | undefined;
     addEmployee: (employee: Employee) => void;
-    addHistoryEmployee: (id: string | number, action: "entrada" | "saida") => void
+    addHistoryEmployee: (id: string | number) => void
     removeEmployee: (id: string | number) => void;
     findEmployee: (id: string | number) => void;
     updateEmployee: (employee: Employee) => void;
@@ -59,11 +56,11 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-    
-
     function addEmployee (employee: Employee) {
-        setEmployees([...(employees || []), employee]);
-
+        const updatedEmployees = [...(employees || []), employee];
+        setEmployees(updatedEmployees);
+        localStorage.setItem(EmployeesKey, JSON.stringify(updatedEmployees));
+            
         ws1Ref.current = new WebSocket('ws://192.168.43.190:4000/history/criar-autorizacao');
         ws2Ref.current = new WebSocket('ws://192.168.43.190:4000/history/registrar-funcionario');
         ws3Ref.current = new WebSocket('ws://192.168.43.190:4000/history/registrar-imagens');
@@ -102,7 +99,7 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
         setSearchedEmployee(searchedEmployee);
     }
 
-    function addHistoryEmployee(id: string | number, action: "entrada" | "saida") {
+    function addHistoryEmployee(id: string | number) {
         const searchedEmployee = employees.find((emp: Employee) => 
             emp.id === id
         );
@@ -111,10 +108,7 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
 
         const newHistoryEmployee: Employee = {
             ...searchedEmployee,
-            history: {
-                action: action, 
-                date: new Date().toISOString()
-            }
+            history: new Date()
         }  
 
         const updatedHistoryEmployees = [...historyEmployees , newHistoryEmployee];

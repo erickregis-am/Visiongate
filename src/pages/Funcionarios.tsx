@@ -1,10 +1,12 @@
 import { CirclePlus , ChevronRight, Edit, Trash2, User } from "lucide-react";
 import Header from "../components/Header";
 import FuncionarioModal from "../components/FuncionarioModal";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useEmployee, type Employee } from "../contexts/EmployeeContext";
 
 export default function Funcionarios(){
+ 
+
   const { employees } = useEmployee();
   const isEmployeeNull = !employees || employees.length === 0;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +18,7 @@ export default function Funcionarios(){
 
   function handleCloseModal() {
     setIsModalOpen(false);
-    setEmployeeToEdit(undefined); // limpa a seleção ao fechar
+    setEmployeeToEdit(undefined);  
   }
 
   function handleEdit(employee: Employee) {
@@ -25,7 +27,7 @@ export default function Funcionarios(){
   }
 
   useEffect(() => {
-    
+    console.log(employees);
   },[employees])
 
   return (
@@ -161,7 +163,7 @@ function FuncionarioCards({ employee, onEdit}: {employee: Employee, onEdit: (emp
 
             <div className="flex flex-col gap-1">
               <p className="font-bold">Autorização:</p>
-              <p className="underline text-[#0288c7]">{employee.authorization.authorizationName}</p>
+              <p className="underline text-green-700">{employee.authorization.authorizationName}</p>
               <p className="italic">"{employee.authorization.level}"</p>
             </div>
           </div>

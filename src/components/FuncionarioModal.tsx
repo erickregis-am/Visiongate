@@ -58,6 +58,7 @@ export default function FuncionarioModal({ isOpen, onClose, employeeToEdit }: Fu
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+ 
 
     const newEmployee = {
       idImage,
@@ -73,15 +74,15 @@ export default function FuncionarioModal({ isOpen, onClose, employeeToEdit }: Fu
       }
     };
 
+    
+
     const existing = employees.find(emp => emp.id === id);
     if (existing) {
       updateEmployee(newEmployee);
+   
     } else {
       addEmployee(newEmployee);
-    }
-
-    if(!localImage && !employeeToEdit?.idImageLocal){
-      return
+      
     }
 
     onClose();

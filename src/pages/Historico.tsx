@@ -5,11 +5,13 @@ import { useEmployee } from "../contexts/EmployeeContext";
 
 export default function Historico(){
 
-    const { historyEmployees, employees,addHistoryEmployee} = useEmployee();
+    const { historyEmployees, addHistoryEmployee} = useEmployee();
+
+    const isHistoryEmployeeNull = !historyEmployees || historyEmployees.length === 0;
 
     useEffect(() => {
-        console.log(employees);
-        addHistoryEmployee("239436", "entrada");
+        console.log(historyEmployees);
+        addHistoryEmployee("239436");
     },[])
 
     return (
@@ -22,11 +24,20 @@ export default function Historico(){
                         <p>Histórico</p>
                     </div>
 
-                    {historyEmployees.map((employee) => (
-                        <HistoryCard key={employee.id}
-                        employee={employee} 
-                        />
+                    {isHistoryEmployeeNull ? (
+                        <p className="flex justify-center items-center w-full h-full p-50 text-gray-600">
+                        Nenhum funcionário está cadastrado.
+                        </p>
+                    ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full p-2">
+                        {historyEmployees.map((employee) => (
+                        <HistoryCard
+                        key={employee.id}
+                        employee={employee}
+                    />
                     ))}
+                    </div>
+                )}
                 </div>
             </div>
         </div>
