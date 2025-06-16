@@ -3,7 +3,7 @@ interface LogoProps {
     strokeColor?: string;
     classname?: string;
     percentSize: number;
-    strokeWidth: number;
+    strokeWidth?: number;
 }
 
 export function LogoIcon({fill,percentSize,strokeColor,classname, strokeWidth} : LogoProps) {
