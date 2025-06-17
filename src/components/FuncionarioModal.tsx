@@ -45,6 +45,7 @@ export default function FuncionarioModal({ isOpen, onClose, employeeToEdit }: Fu
       setAuthorizationlevel("");
       setIdImage(undefined);
       setLocalImage(undefined);
+      setBinaryImage(undefined);
     }
   }, [isOpen, employeeToEdit]);
 
@@ -60,7 +61,7 @@ export default function FuncionarioModal({ isOpen, onClose, employeeToEdit }: Fu
     e.preventDefault();
  
 
-    const newEmployee = {
+    const newEmployee: Employee = {
       idImage,
       idImageLocal: localImage ?? employeeToEdit?.idImageLocal,
       binaryImage,
@@ -78,7 +79,11 @@ export default function FuncionarioModal({ isOpen, onClose, employeeToEdit }: Fu
 
     const existing = employees.find(emp => emp.id === id);
     if (existing) {
-      updateEmployee(newEmployee);
+      updateEmployee({
+        ...newEmployee,
+        idImage: idImage ?? employeeToEdit?.idImage,
+        idImageLocal: localImage ?? employeeToEdit?.idImageLocal
+      });
    
     } else {
       addEmployee(newEmployee);

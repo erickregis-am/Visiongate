@@ -12,14 +12,14 @@ export default function HistoryCard({ employee }: HistoryCardProps) {
         <div className="flex flex-col justify-start items-center w-full min-h-[100px] p-2 rounded-xl bg-white shadow transition-all duration-300">
             <div className="flex flex-col justify-between w-full  items-center gap-4  rounded-lg">
                 <div className="w-9/10 p-3 py-6 gap-3 flex flex-row justify-start items-center border-b-2 border-gray-300">
-                    {employee.idImage ? (
+                    {employee.idImageLocal ? (
                     <img
                     className="w-20 h-20 object-cover rounded-md"
                     src={employee.idImageLocal}
                     alt="Foto do funcionário"
                     />
                     ) : (
-                    <div className="w-28 h-28 bg-[#d6d6d6] flex items-center justify-center rounded-md">
+                    <div className="w-20 h-20 bg-[#d6d6d6] flex items-center justify-center rounded-md">
                         <User color="#B9B9B9" size={72} />
                     </div>
                     )}

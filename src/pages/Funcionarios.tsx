@@ -56,7 +56,7 @@ export default function Funcionarios(){
               Nenhum funcionário está cadastrado.
             </p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full p-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full h-full p-2">
               {employees.map((employee) => (
                 <FuncionarioCards
                   key={employee.id}
@@ -124,18 +124,18 @@ function FuncionarioCards({ employee, onEdit}: {employee: Employee, onEdit: (emp
           </div>
 
           <div className="flex flex-col flex-1 gap-1 text-lg">
-            <div className="flex gap-1">
-              <p className="font-bold">ID:</p>
+            <div className="flex gap-3">
+              <p className="font-bold text-gray-900">ID:</p>
               <p>{employee.id}</p>
             </div>
 
-            <div className="flex gap-1">
-              <p className="font-bold">Nome:</p>
+            <div className="flex gap-3">
+              <p className="font-bold text-gray-900">Nome:</p>
               <p>{employee.name}</p>
             </div>
 
-            <div className="flex gap-1">
-              <p className="font-bold">Função:</p>
+            <div className="flex gap-3">
+              <p className="font-bold text-gray-900">Função:</p>
               <p>{employee.function}</p>
             </div>
           </div>
@@ -156,13 +156,13 @@ function FuncionarioCards({ employee, onEdit}: {employee: Employee, onEdit: (emp
 
         {cardInfoVisible && (
           <div className="flex flex-col w-full mt-4 bg-neutral-100 p-4 rounded-lg gap-3 text-lg">
-            <div className="flex gap-1">
-              <p className="font-bold">Organização:</p>
+            <div className="flex gap-3">
+              <p className="font-bold text-gray-900">Organização:</p>
               <p>{employee.organization}</p>
             </div>
 
-            <div className="flex flex-col gap-1">
-              <p className="font-bold">Autorização:</p>
+            <div className="flex flex-col gap-3">
+              <p className="font-bold text-gray-900">Autorização:</p>
               <p className="underline text-green-700">{employee.authorization.authorizationName}</p>
               <p className="italic">"{employee.authorization.level}"</p>
             </div>

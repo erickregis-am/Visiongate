@@ -29,8 +29,8 @@ export default function Historico(){
                         Nenhum funcionário está cadastrado.
                         </p>
                     ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full p-2">
-                        {historyEmployees.map((employee) => (
+                    <div className="grid grid-inv-cols-1 md:grid-cols-3 gap-6 w-full p-2">
+                        {[...historyEmployees].reverse().map((employee) => (
                         <HistoryCard
                         key={employee.id}
                         employee={employee}

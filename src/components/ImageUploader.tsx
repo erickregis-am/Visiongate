@@ -10,6 +10,8 @@ interface ImageUploaderProps {
 export default function ImageUploader({ onImageSelect, label, initialPreview }: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | undefined>(initialPreview);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setPreview(initialPreview);
@@ -35,20 +37,23 @@ export default function ImageUploader({ onImageSelect, label, initialPreview }: 
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
-
+    setError(null);
     if (file) {
       try {
-        const LocalImage = await toBase64(file);
+        setLoading(true);
+        const localImage = await toBase64(file);
         const binaryData = await toBinary(file);
-        setPreview(LocalImage);
+        setPreview(localImage);
 
-        // Envia para o pai: File, Base64 e buffer binário
-        onImageSelect(file, LocalImage, binaryData);
+        onImageSelect(file, localImage, binaryData);
       } catch (err) {
         console.error("Erro ao processar imagem", err);
+        setError("Erro ao carregar imagem. Tente outro arquivo.");
+      } finally {
+        setLoading(false);
       }
 
-      if (fileInputRef.current && fileInputRef.current.files?.length) {
+      if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
     }
@@ -60,7 +65,8 @@ export default function ImageUploader({ onImageSelect, label, initialPreview }: 
 
   function handleRemove() {
     setPreview(undefined);
-    onImageSelect(undefined, "", undefined); // Envia null ao remover
+    setError(null);
+    onImageSelect(undefined, "", undefined);
   }
 
   return (
@@ -70,15 +76,26 @@ export default function ImageUploader({ onImageSelect, label, initialPreview }: 
       {preview ? (
         <div className="relative">
           <img src={preview} alt="Preview" className="w-48 h-48 object-cover rounded-md" />
-          <button onClick={handleRemove} className="transition absolute top-2 right-2 text-white bg-red-500 hover:bg-red-700 rounded-full w-8 h-8 flex items-center justify-center">
-            <CircleX size={28}/>
+          <button
+            onClick={handleRemove}
+            className="transition absolute top-2 right-2 text-white bg-red-500 hover:bg-red-700 rounded-full w-8 h-8 flex items-center justify-center"
+            aria-label="Remover imagem selecionada"
+          >
+            <CircleX size={28} />
           </button>
         </div>
       ) : (
-        <button onClick={handleClick} className="transition w-48 h-48 border border-dashed border-gray-400 rounded-md hover:bg-gray-100">
-          Selecionar imagem
+        <button
+          onClick={handleClick}
+          className="transition w-48 h-48 border border-dashed border-gray-400 rounded-md hover:bg-gray-100"
+          aria-label="Selecionar imagem"
+          disabled={loading}
+        >
+          {loading ? "Carregando..." : "Selecionar imagem"}
         </button>
       )}
+
+      {error && <p className="text-red-600 text-sm">{error}</p>}
 
       <input
         ref={fileInputRef}

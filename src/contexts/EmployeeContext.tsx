@@ -21,7 +21,7 @@ type EmployeeContextType = {
     recentEmployees: Employee[] | [];
     historyEmployees: Employee[] | [];
     recentEmployee: Employee | undefined;
-    addRecentEmployee: (id: string | number) => void;
+    addRecentEmployee: () => void;
     searchedEmployee: Employee | undefined;
     addEmployee: (employee: Employee) => void;
     addHistoryEmployee: (id: string | number) => void
@@ -57,9 +57,11 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     function addEmployee (employee: Employee) {
-        const updatedEmployees = [...(employees || []), employee];
-        setEmployees(updatedEmployees);
-        localStorage.setItem(EmployeesKey, JSON.stringify(updatedEmployees));
+        setEmployees(prevEmployees => {
+            const updatedEmployees = [...prevEmployees, employee];
+            localStorage.setItem(EmployeesKey, JSON.stringify(updatedEmployees));
+            return updatedEmployees;
+        });
             
         ws1Ref.current = new WebSocket('ws://192.168.43.190:4000/history/criar-autorizacao');
         ws2Ref.current = new WebSocket('ws://192.168.43.190:4000/history/registrar-funcionario');
@@ -154,11 +156,13 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
         ws4Ref.current.onmessage = (event) => {
             try {
                 data = JSON.parse(event.data);
+                setRecentEmployee(data);
                 console.log("Mensagem recebida:", data);
             } catch {
                 console.log("Recebido (raw):", event.data);
             }
         }
+ 
     }
 
 
